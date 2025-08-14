@@ -1,27 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dynamic Quote Generator</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    #quoteDisplay {
-      margin: 20px 0;
-      font-size: 1.2em;
-      font-weight: bold;
-    }
-    .category {
-      color: #555;
-      font-size: 0.9em;
-    }
-    input, button, select {
-      padding: 8px;
-      margin: 5px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #quoteDisplay { margin: 20px 0; font-size: 1.2em; font-weight: bold; }
+    .category { color: #555; font-size: 0.9em; }
+    input, button, select { padding: 8px; margin: 5px; }
   </style>
 </head>
 <body>
@@ -38,6 +25,10 @@
   <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
   <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
   <button id="addQuoteBtn">Add Quote</button>
+
+  <h2>Import / Export Quotes</h2>
+  <button id="exportBtn">Export Quotes (JSON)</button>
+  <input type="file" id="importFile" accept=".json" />
 
   <script src="script.js"></script>
 </body>
