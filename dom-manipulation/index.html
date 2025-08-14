@@ -6,30 +6,97 @@
   <title>Dynamic Quote Generator</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    #quoteDisplay { margin: 20px 0; font-size: 1.2em; font-weight: bold; }
+    #quoteDisplay { margin: 20px 0; font-size: 1.1em; }
     .category { color: #555; font-size: 0.9em; }
-    input, button, select { padding: 8px; margin: 5px; }
-    .quoteItem { margin: 10px 0; padding: 10px; border-left: 4px solid #ccc; }
+    input, button, select, label { padding: 8px; margin: 5px 6px 5px 0; }
+    .quoteItem { margin: 10px 0; padding: 10px; border-left: 4px solid #ccc; background: #fafafa; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .status {
+      margin: 10px 0; padding: 10px;
+      background: #f0f7ff; border: 1px solid #cfe3ff; border-radius: 8px;
+      font-size: 0.95em;
+    }
+    .status strong { margin-right: 6px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #eee; margin-right: 6px; font-size: 0.85em; }
+    .hidden { display: none; }
+
+    /* Modal */
+    #conflictModal {
+      position: fixed; inset: 0; display: none; background: rgba(0,0,0,0.45);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    #conflictModal .modal-content {
+      background: #fff; max-width: 700px; width: 100%; padding: 16px; border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+      max-height: 80vh; overflow: auto;
+    }
+    .conflict {
+      border: 1px solid #eee; border-radius: 8px; padding: 10px; margin: 10px 0;
+      background: #fcfcfc;
+    }
+    .conflict h4 { margin: 0 0 8px 0; }
+    .conflict .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .conflict .box {
+      background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 8px;
+      font-size: 0.95em;
+    }
+    .conflict .actions { margin-top: 10px; display: flex; gap: 8px; }
+    .right { text-align: right; }
   </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <label for="categoryFilter">Filter by Category:</label>
-  <select id="categoryFilter"></select>
-  
-  <div id="quoteDisplay"></div>
-  
-  <button id="newQuote">Show New Quote</button>
+  <!-- Filtering -->
+  <div class="toolbar">
+    <label for="categoryFilter">Filter by Category:</label>
+    <select id="categoryFilter"></select>
+    <button id="newQuote">Show Random Quote</button>
+  </div>
 
+  <!-- Sync controls -->
+  <div class="toolbar">
+    <button id="syncNowBtn">Sync Now</button>
+    <label>
+      <input type="checkbox" id="autoSyncToggle" />
+      Auto-sync every 30s
+    </label>
+    <button id="reviewConflictsBtn" class="hidden">Review Conflicts</button>
+  </div>
+
+  <div id="syncStatus" class="status">
+    <strong>Sync:</strong>
+    <span id="syncSummary">No sync yet.</span>
+  </div>
+
+  <!-- Quotes display -->
+  <div id="quoteDisplay"></div>
+
+  <!-- Add Quote -->
   <h2>Add a New Quote</h2>
   <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
   <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
   <button id="addQuoteBtn">Add Quote</button>
 
+  <!-- Import / Export -->
   <h2>Import / Export Quotes</h2>
   <button id="exportBtn">Export Quotes (JSON)</button>
   <input type="file" id="importFile" accept=".json" />
+
+  <!-- Conflict Modal -->
+  <div id="conflictModal">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <h3>Resolve Conflicts</h3>
+        <button id="closeConflictModal">Close</button>
+      </div>
+      <div id="conflictList"></div>
+      <div class="right" style="margin-top:10px;">
+        <button id="applyAllServer">Apply Server to All</button>
+        <button id="applyAllLocal">Keep Local for All</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
