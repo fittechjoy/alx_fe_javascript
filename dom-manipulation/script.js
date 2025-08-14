@@ -15,19 +15,11 @@ const addQuoteBtn = document.getElementById("addQuoteBtn");
 const newQuoteText = document.getElementById("newQuoteText");
 const newQuoteCategory = document.getElementById("newQuoteCategory");
 
-// Populate categories dynamically (with "All" option)
+// Populate categories dynamically
 function populateCategories() {
+  // Get unique categories
   const categories = [...new Set(quotes.map(q => q.category))];
-  
   categorySelect.innerHTML = "";
-
-  // Add "All" option at the top
-  const allOption = document.createElement("option");
-  allOption.value = "All";
-  allOption.textContent = "All Categories";
-  categorySelect.appendChild(allOption);
-
-  // Add each category
   categories.forEach(cat => {
     const option = document.createElement("option");
     option.value = cat;
@@ -36,16 +28,10 @@ function populateCategories() {
   });
 }
 
-// Show a random quote
+// Show a random quote from selected category
 function showRandomQuote() {
   const selectedCategory = categorySelect.value;
-  let filteredQuotes;
-
-  if (selectedCategory === "All") {
-    filteredQuotes = quotes; // Use all quotes
-  } else {
-    filteredQuotes = quotes.filter(q => q.category === selectedCategory);
-  }
+  const filteredQuotes = quotes.filter(q => q.category === selectedCategory);
   
   if (filteredQuotes.length === 0) {
     quoteDisplay.textContent = "No quotes available in this category.";
@@ -70,7 +56,7 @@ function addQuote() {
 
   quotes.push({ text, category });
 
-  // Update categories list if new category
+  // Update category dropdown if it's a new category
   if (![...categorySelect.options].some(opt => opt.value === category)) {
     const option = document.createElement("option");
     option.value = category;
